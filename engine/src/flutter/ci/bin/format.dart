@@ -273,7 +273,6 @@ abstract class FormatChecker {
         .split('\n')
         .where(
             (String line) => line.isNotEmpty && !line.contains('third_party'))
-        .map((String path) => path.replaceFirst('flutter/', ''))
         .toList();
   }
 
@@ -674,6 +673,7 @@ class GnFormatChecker extends FormatChecker {
     gnBinary = File(
       path.join(
         repoDir.absolute.path,
+        'engine', 'src', 'flutter',
         'third_party',
         'gn',
         Platform.isWindows ? 'gn.exe' : 'gn',
@@ -1019,6 +1019,8 @@ final class HeaderFormatChecker extends FormatChecker {
   // $ENGINE/flutter/third_party/dart/tools/sdks/dart-sdk/bin/dart
   late final String _dartBin = path.join(
     repoDir.absolute.parent.path,
+    'engine',
+    'src',
     'flutter',
     'third_party',
     'dart',
@@ -1032,6 +1034,9 @@ final class HeaderFormatChecker extends FormatChecker {
   // $ENGINE/src/flutter/tools/bin/main.dart
   late final String _headerGuardCheckBin = path.join(
     repoDir.absolute.path,
+    'engine',
+    'src',
+    'flutter',
     'tools',
     'header_guard_check',
     'bin',
@@ -1170,8 +1175,8 @@ Future<int> main(List<String> arguments) async {
   }
 
   final File script = File.fromUri(Platform.script).absolute;
-  final Directory repoDir = script.parent.parent.parent;
-  final Directory srcDir = repoDir.parent;
+  final Directory repoDir = script.parent.parent.parent.parent.parent.parent;
+  final Directory srcDir = Directory(path.join(repoDir.path, 'engine/src'));
   if (verbose) {
     stderr.writeln('Repo: $repoDir');
     stderr.writeln('Src: $srcDir');
