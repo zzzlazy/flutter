@@ -269,9 +269,12 @@ abstract class FormatChecker {
         ...types,
       ]);
     }
-    return output.split('\n').where(
-      (String line) => line.isNotEmpty && !line.contains('third_party')
-    ).toList();
+    return output
+        .split('\n')
+        .where(
+            (String line) => line.isNotEmpty && !line.contains('third_party'))
+        .map((String path) => path.replaceFirst('flutter/', ''))
+        .toList();
   }
 
   /// Generates a reporting function to supply to ProcessRunner to use instead
