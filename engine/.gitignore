@@ -1,5 +1,6 @@
+.gclient
 .gclient_entries
 .gclient_previous_custom_vars
 .gclient_previous_sync_commits
 .cipd/
-empty/
+ignore/
