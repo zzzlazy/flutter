@@ -183,6 +183,7 @@ final ArgParser _parser = ArgParser()
     help: 'Paths to exclude from the check.',
     valueHelp: 'path/to/dir/or/file (relative to the engine root)',
     defaultsTo: _engine != null ? <String>[
+      'engine/src/build',
       'engine/src/flutter/build',
       'engine/src/flutter/buildtools',
       'engine/src/flutter/impeller/compiler/code_gen_template.h',

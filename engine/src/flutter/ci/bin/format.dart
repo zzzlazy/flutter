@@ -272,7 +272,7 @@ abstract class FormatChecker {
     return output
         .split('\n')
         .where(
-            (String line) => line.isNotEmpty && !line.contains('third_party'))
+            (String line) => line.isNotEmpty && !line.contains('third_party') && line.contains('engine/src/flutter'))
         .toList();
   }
 

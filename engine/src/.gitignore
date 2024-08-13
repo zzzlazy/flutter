@@ -36,3 +36,6 @@ Thumbs.db
 
 # This is where the gclient hook downloads the Fuchsia SDK and toolchain.
 /fuchsia/
+
+# Override higher level build ignore
+!build/
