@@ -4,9 +4,9 @@ solutions = [
     "custom_vars": {
       "use_rbe": True,
     },
-    "deps_file": "../DEPS",
+    "deps_file": "../../DEPS",
     "managed": False,
-    "name": "ignore",
-    "url": "empty.git",
+    "name": "engine/ignore",
+    "url": "engine/empty.git",
   },
 ]
