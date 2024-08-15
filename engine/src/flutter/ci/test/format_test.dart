@@ -9,8 +9,8 @@ import 'package:path/path.dart' as path;
 
 import '../bin/format.dart' as target;
 
-final io.File script = io.File.fromUri(io.Platform.script).absolute;
-final io.Directory repoDir = script.parent.parent.parent;
+final io.Directory engineDir =
+    io.Directory(path.join(target.repositoryRoot().path, 'engine/src/flutter'));
 
 class FileContentPair {
   FileContentPair(this.original, this.formatted);
@@ -54,31 +54,31 @@ class TestFileFixture {
   TestFileFixture(this.type) {
     switch (type) {
       case target.FormatCheck.clang:
-        final io.File ccFile = io.File('${repoDir.path}/format_test.cc');
+        final io.File ccFile = io.File('${engineDir.path}/format_test.cc');
         ccFile.writeAsStringSync(ccContentPair.original);
         files.add(ccFile);
 
-        final io.File hFile = io.File('${repoDir.path}/format_test.h');
+        final io.File hFile = io.File('${engineDir.path}/format_test.h');
         hFile.writeAsStringSync(hContentPair.original);
         files.add(hFile);
       case target.FormatCheck.gn:
-        final io.File gnFile = io.File('${repoDir.path}/format_test.gn');
+        final io.File gnFile = io.File('${engineDir.path}/format_test.gn');
         gnFile.writeAsStringSync(gnContentPair.original);
         files.add(gnFile);
       case target.FormatCheck.java:
-        final io.File javaFile = io.File('${repoDir.path}/format_test.java');
+        final io.File javaFile = io.File('${engineDir.path}/format_test.java');
         javaFile.writeAsStringSync(javaContentPair.original);
         files.add(javaFile);
       case target.FormatCheck.python:
-        final io.File pyFile = io.File('${repoDir.path}/format_test.py');
+        final io.File pyFile = io.File('${engineDir.path}/format_test.py');
         pyFile.writeAsStringSync(pythonContentPair.original);
         files.add(pyFile);
       case target.FormatCheck.whitespace:
-        final io.File whitespaceFile = io.File('${repoDir.path}/format_test.c');
+        final io.File whitespaceFile = io.File('${engineDir.path}/format_test.c');
         whitespaceFile.writeAsStringSync(whitespaceContentPair.original);
         files.add(whitespaceFile);
       case target.FormatCheck.header:
-        final io.File headerFile = io.File('${repoDir.path}/format_test.h');
+        final io.File headerFile = io.File('${engineDir.path}/format_test.h');
         headerFile.writeAsStringSync(headerContentPair.original);
         files.add(headerFile);
     }
@@ -149,14 +149,14 @@ class TestFileFixture {
 
 void main() {
   final String formatterPath =
-      '${repoDir.path}/ci/format.${io.Platform.isWindows ? 'bat' : 'sh'}';
+      '${engineDir.path}/ci/format.${io.Platform.isWindows ? 'bat' : 'sh'}';
 
   test('Can fix C++ formatting errors', () {
     final TestFileFixture fixture = TestFileFixture(target.FormatCheck.clang);
     try {
       fixture.gitAdd();
       io.Process.runSync(formatterPath, <String>['--check', 'clang', '--fix'],
-          workingDirectory: repoDir.path);
+          workingDirectory: engineDir.path);
 
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
@@ -172,7 +172,7 @@ void main() {
     try {
       fixture.gitAdd();
       io.Process.runSync(formatterPath, <String>['--check', 'gn', '--fix'],
-          workingDirectory: repoDir.path);
+          workingDirectory: engineDir.path);
 
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
@@ -188,7 +188,7 @@ void main() {
     try {
       fixture.gitAdd();
       io.Process.runSync(formatterPath, <String>['--check', 'java', '--fix'],
-          workingDirectory: repoDir.path);
+          workingDirectory: engineDir.path);
 
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
@@ -204,7 +204,7 @@ void main() {
     try {
       fixture.gitAdd();
       io.Process.runSync(formatterPath, <String>['--check', 'python', '--fix'],
-          workingDirectory: repoDir.path);
+          workingDirectory: engineDir.path);
 
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
@@ -222,7 +222,7 @@ void main() {
       fixture.gitAdd();
       io.Process.runSync(
           formatterPath, <String>['--check', 'whitespace', '--fix'],
-          workingDirectory: repoDir.path);
+          workingDirectory: engineDir.path);
 
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
@@ -239,7 +239,7 @@ void main() {
       fixture.gitAdd();
       io.Process.runSync(
         formatterPath, <String>['--check', 'header', '--fix'],
-        workingDirectory: repoDir.path,
+        workingDirectory: engineDir.path,
       );
       final Iterable<FileContentPair> files = fixture.getFileContents();
       for (final FileContentPair pair in files) {
