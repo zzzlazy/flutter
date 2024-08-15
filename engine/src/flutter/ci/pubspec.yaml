@@ -14,7 +14,6 @@ resolution: workspace
 
 dependencies:
   args: any
-  collection: any
   meta: any
   path: any
   process_runner: any
