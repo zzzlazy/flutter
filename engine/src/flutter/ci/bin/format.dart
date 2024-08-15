@@ -9,6 +9,7 @@
 import 'dart:io';
 
 import 'package:args/args.dart';
+import 'package:collection/collection.dart';
 import 'package:meta/meta.dart';
 import 'package:path/path.dart' as path;
 import 'package:process/process.dart';
@@ -1018,7 +1019,7 @@ final class HeaderFormatChecker extends FormatChecker {
 
   // $ENGINE/flutter/third_party/dart/tools/sdks/dart-sdk/bin/dart
   late final String _dartBin = path.join(
-    repoDir.absolute.parent.path,
+    repoDir.absolute.path,
     'engine',
     'src',
     'flutter',
@@ -1174,8 +1175,23 @@ Future<int> main(List<String> arguments) async {
     _usage(parser, exitCode: 0);
   }
 
+  final enginePath = path.split('engine/src/flutter');
   final File script = File.fromUri(Platform.script).absolute;
-  final Directory repoDir = script.parent.parent.parent.parent.parent.parent;
+  final searchPath = path.split(script.parent.path);
+  final eq = const ListEquality<String>().equals;
+
+  while (searchPath.isNotEmpty) {
+    if (searchPath.length < 3) {
+      stderr.writeln('Unable to find root');
+      exit(-1);
+    }
+    if (eq(searchPath.sublist(searchPath.length - 3), enginePath)) {
+      searchPath.length -= 3;
+      break;
+    }
+    searchPath.length--;
+  }
+  final Directory repoDir = Directory(path.joinAll(searchPath));
   final Directory srcDir = Directory(path.join(repoDir.path, 'engine/src'));
   if (verbose) {
     stderr.writeln('Repo: $repoDir');
