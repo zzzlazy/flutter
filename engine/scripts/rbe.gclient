@@ -1,4 +1,4 @@
-# Copy this file to /flutter/engine/.gclient to bootstrap gclient
+# Copy this file to /flutter/.gclient to bootstrap gclient
 solutions = [
   {
     "custom_vars": {
